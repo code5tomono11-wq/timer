@@ -104,3 +104,10 @@
 .photo-empty{position:relative;z-index:2;background:#fff8f0e8;border:1px dashed #c99e88;color:#89685a;border-radius:18px;padding:15px 20px;font-weight:700;box-shadow:0 5px 15px #6d493018}
 .room-photo-empty{width:220px;height:170px;flex:0 0 220px}
 .hero-pet{z-index:1}
+
+/* Built-in default pet photos */
+.pet-options button{display:flex;flex-direction:column;align-items:center;gap:7px}
+.pet-option-photo{width:74px;height:74px;border-radius:14px;object-fit:cover;box-shadow:0 3px 9px #5a34251c}
+.hero-pet{width:100%;height:100%;object-fit:cover;object-position:center 42%;border-radius:inherit}
+.room-hero>img{width:220px;height:170px;object-fit:cover;border-radius:18px;flex:0 0 220px}
+.timer-pet-badge img{width:42px;height:42px;object-fit:cover;border-radius:50%}
