@@ -27,3 +27,42 @@
 .delete-task-btn:hover{background:#ffe8e6;border-color:#e7a8a5}
 .delete-task-btn:focus-visible{outline:3px solid #e9a0a5;outline-offset:2px}
 @media(max-width:600px){.task-row{gap:7px}.delete-task-btn{padding:7px 8px}.wide-task{flex-wrap:wrap}.wide-task .delete-task-btn{margin-left:auto}}
+
+
+/* Distinct home and timer experiences */
+.timer-workspace{max-width:980px;margin:0 auto;padding:clamp(18px,4vw,42px)}
+.timer-page-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:26px}
+.timer-page-heading h2{font-size:clamp(23px,3vw,32px);margin:6px 0;color:#55343d}
+.timer-page-heading p{margin:0;color:#927c74;font-size:13px}
+.timer-pet-badge{display:flex;align-items:center;gap:10px;background:#fff5f0;border:1px solid #f0dfd8;border-radius:20px;padding:9px 14px;white-space:nowrap}
+.timer-pet-badge img,.timer-pet-badge span{width:42px;height:42px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:#f8e4dd;font-size:27px}
+.timer-task-select{display:flex;align-items:center;gap:10px;background:#fff8f4;border:1px solid #f0e0d8;border-radius:17px;padding:13px 15px;margin-bottom:16px}
+.timer-task-select label{font-size:12px;font-weight:700;white-space:nowrap;color:#806b64}
+.timer-task-select select{min-width:0;flex:1;border:1px solid #eadbd4;background:#fff;border-radius:10px;padding:10px;color:#533d3b}
+.timer-workspace .timer-card{margin:0;padding:clamp(22px,5vw,42px);border-radius:26px;box-shadow:0 12px 32px #8b5e4d12}
+.timer-workspace .timer-tabs{max-width:460px;margin:0 auto 20px}
+.timer-workspace .timer-digits{font-size:clamp(68px,12vw,104px);margin:18px 0 8px;letter-spacing:3px}
+.timer-workspace .time-inputs{margin:22px 0}
+.timer-workspace .time-inputs input{width:68px;padding:9px;font-size:16px}
+.timer-workspace .timer-options{margin:18px 0}
+.timer-workspace .timer-actions{margin-top:16px}
+.timer-workspace .start-btn{min-width:220px;padding:14px 30px;font-size:18px}
+.timer-workspace .sound-settings{margin-top:22px}
+.timer-encouragement{display:flex;align-items:center;gap:13px;background:#fff3ed;border:1px solid #f0dfd8;border-radius:18px;padding:15px 18px;margin-top:18px}
+.timer-encouragement>span{font-size:34px}
+.timer-encouragement b{font-size:13px}
+.timer-encouragement p{font-size:11px;color:#927c74;margin:3px 0 0}
+.room-pet-fallback{width:220px;height:170px;flex:0 0 220px;border-radius:20px;background:radial-gradient(circle at 50% 35%,#fff6ec,#ead0c1);display:grid;place-items:center;font-size:92px}
+.fallback-pet{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 40% 30%,#fff7ec,#e7c9b8);font-size:125px;filter:drop-shadow(0 12px 12px #5b382c24)}
+@media(max-width:700px){
+ .timer-workspace{padding:17px 12px}
+ .timer-page-heading{align-items:flex-start}
+ .timer-pet-badge{padding:7px 10px;font-size:12px}
+ .timer-pet-badge img,.timer-pet-badge span{width:34px;height:34px}
+ .timer-task-select{flex-wrap:wrap}
+ .timer-task-select label{width:100%}
+ .timer-task-select select{flex-basis:100%}
+ .timer-workspace .timer-digits{font-size:60px}
+ .timer-workspace .timer-options{flex-wrap:wrap}
+ .room-pet-fallback{width:100%;height:190px;margin-bottom:12px}
+}
