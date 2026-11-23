@@ -194,6 +194,11 @@ export default function App() {
       notify("おつかれさま！コインと経験値を獲得したよ✨");
     }
   }
+  function deleteTask(task) {
+    if (!window.confirm(`「${task.title}」を削除しますか？\\nこの操作は取り消せません。`)) return;
+    setData(d => ({ ...d, tasks: d.tasks.filter(t => t.id !== task.id), selectedTaskId: d.selectedTaskId === task.id ? "" : d.selectedTaskId }));
+    notify("タスクを削除したよ");
+  }
   function toggleDone(task) {
     setData(d => ({ ...d, tasks: d.tasks.map(t => t.id === task.id ? { ...t, done: !t.done } : t), pet: task.done ? d.pet : { ...d.pet, coins: d.pet.coins+2, xp: d.pet.xp+5, affection: Math.min(100,d.pet.affection+1) } }));
     if (!task.done) notify("タスク完了！ペットが喜んでいるよ🐾");
@@ -323,7 +328,7 @@ export default function App() {
           <div className="task-list">{visibleTasks.slice(0,8).map(task=><div className={`task-row ${task.done?"completed":""}`} key={task.id}>
             <button className={`check ${task.done?"checked":""}`} onClick={()=>toggleDone(task)}>{task.done?"✓":""}</button>
             <div className="task-info"><button className="task-title" onClick={()=>openNewTask(task)}>{task.title}</button><div className="task-meta">{task.tags.map(tag=>{const t=data.tags.find(x=>x.name===tag);return <span className="tag" style={{background:t?.color||"#eee"}}>{tag}</span>})}<span className="duration">◷ {task.minutes}分</span>{task.priority==="高"&&<span className="flag">⚑</span>}</div></div>
-            <button className="more" onClick={()=>openNewTask(task)}>•••</button>
+            <button className="delete-task-btn" aria-label={`${task.title}を削除`} title="タスクを削除" onClick={()=>deleteTask(task)}>🗑</button>
           </div>)}</div>
           <div className="tag-manager"><div className="tag-heading"><b>◇ タグ管理</b><button onClick={()=>setShowTagManager(!showTagManager)}>＋</button></div><div className="tag-cloud">{data.tags.map(t=><span className="tag" style={{background:t.color}}>{t.name}</span>)}</div>
             {showTagManager&&<form className="inline-form" onSubmit={addTag}><input placeholder="新しいタグ名" value={tagName} onChange={e=>setTagName(e.target.value)}/><input type="color" value={tagColor} onChange={e=>setTagColor(e.target.value)}/><button>追加</button></form>}
@@ -339,7 +344,7 @@ export default function App() {
       {page==="タスク" && <section className="full-panel">
         <div className="panel-head"><h2>☑ タスク管理</h2><button className="add-btn" onClick={()=>openNewTask()}>＋ タスクを追加</button></div>
         <div className="task-view-switch"><button className={data.view==="list"?"on":""} onClick={()=>patch({view:"list"})}>☷ リスト</button><button className={data.view==="calendar"?"on":""} onClick={()=>patch({view:"calendar"})}>▦ カレンダー</button></div>
-        {data.view==="list" ? <div className="wide-task-list">{data.tasks.map(task=><div className="wide-task" key={task.id}><button className={`check ${task.done?"checked":""}`} onClick={()=>toggleDone(task)}>{task.done?"✓":""}</button><div className="task-info"><button className="task-title" onClick={()=>openNewTask(task)}>{task.title}</button><div className="task-meta">{task.tags.map(tag=><span className="tag" style={{background:data.tags.find(t=>t.name===tag)?.color||"#eee"}}>{tag}</span>)}<span>{task.due?new Date(task.due).toLocaleString("ja-JP"):"期限未設定"}</span><span>{task.minutes}分</span><b className="priority">{task.priority}</b></div></div><button className="soft-btn" onClick={()=>openNewTask(task)}>編集</button></div>)}</div>
+        {data.view==="list" ? <div className="wide-task-list">{data.tasks.map(task=><div className="wide-task" key={task.id}><button className={`check ${task.done?"checked":""}`} onClick={()=>toggleDone(task)}>{task.done?"✓":""}</button><div className="task-info"><button className="task-title" onClick={()=>openNewTask(task)}>{task.title}</button><div className="task-meta">{task.tags.map(tag=><span className="tag" style={{background:data.tags.find(t=>t.name===tag)?.color||"#eee"}}>{tag}</span>)}<span>{task.due?new Date(task.due).toLocaleString("ja-JP"):"期限未設定"}</span><span>{task.minutes}分</span><b className="priority">{task.priority}</b></div></div><button className="soft-btn" onClick={()=>openNewTask(task)}>編集</button><button className="delete-task-btn" aria-label={`${task.title}を削除`} title="タスクを削除" onClick={()=>deleteTask(task)}>🗑 削除</button></div>)}</div>
         : <Calendar month={calendarMonth} setMonth={setCalendarMonth} tasks={data.tasks} onTask={openNewTask}/>}
       </section>}
 
