@@ -284,7 +284,7 @@ export default function App() {
     <aside className="sidebar">
       <div className="brand"><span className="paw">🐾</span><span>pet timer</span></div>
       <p className="tagline">いっしょにがんばる、<br/>ペットの学習タイマー</p>
-      <button className="pet-select" onClick={() => setPetPicker(true)}><span className="avatar">{petEmoji[data.pet.type]}</span><b>{data.pet.name}</b><span className="chevron">⌄</span></button>
+      <button className="pet-select" onClick={() => setPetPicker(true)}><img className="avatar pet-avatar-photo" src={petImage()} alt=""/><b>{data.pet.name}</b><span className="chevron">⌄</span></button>
       <nav>{nav.map((n,i)=><button key={n} className={page===n?"nav-item active":"nav-item"} onClick={()=>setPage(n)}><span>{["⌂","◷","♧","☑","🐾","▥","⚙"][i]}</span>{n}</button>)}</nav>
       <div className="sync"><span className="cloud">☁</span><div><b>{syncLabel}</b><small>{account || "ゲストモード"}</small></div></div>
       <button className="account-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"アカウント登録・ログイン"}</button>
@@ -325,7 +325,7 @@ export default function App() {
           </div>
         </aside>
         <section className="pet-status">
-          <div className="status-avatar">{petEmoji[data.pet.type]}</div><div className="status-name"><b>{data.pet.name} のようす</b><small>{isSleeping?"すやすやお昼寝中":"ごきげんだよ！"}</small></div>
+          <img className="status-avatar pet-avatar-photo" src={petImage()} alt=""/><div className="status-name"><b>{data.pet.name} のようす</b><small>{isSleeping?"すやすやお昼寝中":"ごきげんだよ！"}</small></div>
           <div className="meters"><Meter label="ごきげん" value={data.pet.mood} color="#e97c98"/><Meter label="まんぷく" value={data.pet.hunger} color="#f4b63e"/><Meter label="げんき" value={data.pet.energy} color="#55b8df"/></div>
         </section>
         <section className="today-card"><h3>▥ 今日のがんばり</h3><p>💗 集中 <b>{todaySessions.filter(s=>s.mode==="集中").length}回（{Math.floor(focusSeconds/60)}分）</b></p><p>☕ 休憩 <b>{todaySessions.filter(s=>s.mode==="休憩").length}回（{Math.floor(restSeconds/60)}分）</b></p><p>🐾 タスク完了 <b>{doneCount}/{data.tasks.length}件</b></p></section>
@@ -352,7 +352,7 @@ export default function App() {
             </div>
             <div className="sound-settings">🔔 終了音 <select value={soundRepeats} onChange={e=>setSoundRepeats(Number(e.target.value))}><option value="1">1回</option><option value="3">3回</option><option value="5">5回</option></select><span>音量</span><input type="range" min="10" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/><button onClick={()=>beep(Number(soundRepeats),volume/100)}>試聴</button></div>
           </div>
-        <div className="timer-encouragement"><span>{petEmoji[data.pet.type]}</span><div><b>{data.pet.name}が応援しているよ</b><p>終わったら経験値とコインをゲット！</p></div></div>
+        <div className="timer-encouragement"><img className="pet-avatar-photo" src={petImage()} alt=""/><div><b>{data.pet.name}が応援しているよ</b><p>終わったら経験値とコインをゲット！</p></div></div>
       </section>}
       {page==="タスク" && <section className="full-panel">
         <div className="panel-head"><h2>☑ タスク管理</h2><button className="add-btn" onClick={()=>openNewTask()}>＋ タスクを追加</button></div>
