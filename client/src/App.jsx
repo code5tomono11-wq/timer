@@ -294,14 +294,16 @@ export default function App() {
         <section className="center-column">
           <div className="pet-hero">
             <div className="hero-glow"></div>
-            {data.pet.displayMode === "photo" && data.pet.image ? <img className={`hero-pet pet-motion ${isSleeping?"sleeping":""}`} src={petImage()} onError={e=>{e.currentTarget.style.display="none";}} alt={`${data.pet.name}の写真`}/> : <div className={`fallback-pet pet-${data.pet.type} pet-motion ${isSleeping?"sleeping":""}`} role="img" aria-label={`${petLabels[data.pet.type]}のイラスト`}>{petEmoji[data.pet.type]}</div>}
+            {data.pet.displayMode === "photo" && data.pet.image ? <img className={`hero-pet pet-motion ${isSleeping?"sleeping":""}`} src={petImage()} onError={e=>{e.currentTarget.style.display="none";}} alt={`${data.pet.name}の写真`}/> : <PetArtwork type={data.pet.type} sleeping={isSleeping}/>}
             <div className="pet-mode-chip">{data.pet.displayMode === "photo" && data.pet.image ? "📷 写真モード" : "🎨 イラストモード"}</div>
             {isSleeping && <div className="zzz">Z z z</div>}
             <div className="pet-caption"><b>{data.pet.name}</b><span>{isSleeping?"すやすやお昼寝中…":"今日もいっしょにがんばろう！"}</span></div>
             <button className="change-pet" onClick={()=>setPetPicker(true)}>ペットを変更</button>
           </div>
           <div className="quick-actions">
-            <button onClick={feedPet}><span>🍚</span>ごはん</button><button onClick={playPet}><span>🧶</span>あそぶ</button><button onClick={()=>notify("おやつをあげたよ🍪")}><span>🍪</span>おやつ</button><button onClick={()=>notify("なでなで…気持ちよさそう！")}><span>🪮</span>お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}><span>🛏️</span>おやすみ</button>
+            <button onClick={feedPet}><span>🥣</span>ごはん</button><button onClick={playPet}><span>🧶</span>あそぶ</button><button onClick={()=>notify("おやつをあげたよ🍪")}><span>🍪</span>おやつ</button><button onClick={()=>notify("なでなで…気持ちよさそう！")}><span>🪮</span>お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}><span>🛏️</span>おやすみ</button>
+            <button onClick={()=>notify("今日の健康状態を記録しよう！")}><span>💗</span>健康記録</button><button onClick={()=>notify(data.pet.name+"の成長を記録したよ！")}><span>📈</span>成長記録</button><button onClick={()=>notify("今日の思い出を日記に残そう📔")}><span>📔</span>日記</button><button onClick={()=>notify("ペットのアルバムを開く準備中だよ📷")}><span>🖼️</span>アルバム</button><button onClick={()=>notify("次のお世話をリマインダーに登録しよう⏰")}><span>⏰</span>予定・通知</button>
+            <button onClick={()=>notify("お気に入りのおもちゃを選ぼう！")}><span>🎾</span>おもちゃ</button><button onClick={()=>notify("お部屋の模様替え機能は準備中だよ🏠")}><span>🏠</span>お部屋</button>
           </div>
         </section>
         <aside className="task-panel">
@@ -356,7 +358,7 @@ export default function App() {
 
       {page==="アラーム" && <section className="full-panel"><h2>♧ アラーム</h2><div className="alarm-form"><label>時刻<input type="time" value={alarmTime} onChange={e=>setAlarmTime(e.target.value)}/></label><label>音<select value={alarmSound} onChange={e=>setAlarmSound(e.target.value)}><option>ベル</option><option>チャイム</option><option>やさしい音</option></select></label><button className="add-btn" onClick={addAlarm}>＋ アラームを追加</button></div>{data.alarms.map(a=><div className="alarm-row"><b>{a.time}</b><span>{a.sound}</span><label><input type="checkbox" checked={a.enabled} onChange={e=>patch({alarms:data.alarms.map(x=>x.id===a.id?{...x,enabled:e.target.checked}:x)})}/> 有効</label><button onClick={()=>patch({alarms:data.alarms.filter(x=>x.id!==a.id)})}>削除</button></div>)}<p className="notice">※ ブラウザの仕様上、ページを閉じたり端末がスリープしたりすると、アラームが鳴らない場合があります。まずはページを開いたまま、音を有効にしてご利用ください。</p></section>}
 
-      {page==="ペットのお部屋" && <section className="full-panel room"><div className="room-hero">{data.pet.displayMode === "photo" && data.pet.image ? <img className="pet-motion" src={petImage()} alt={`${data.pet.name}の写真`} onError={e=>e.currentTarget.style.display="none"}/> : <div className={`room-pet-fallback pet-motion ${isSleeping?"sleeping":""}`} role="img" aria-label={`${petLabels[data.pet.type]}のイラスト`}>{petEmoji[data.pet.type]}</div>}<div><h2>{data.pet.name}のお部屋</h2><p>いっしょに遊んだり、ごはんをあげたりしよう。</p><div className="room-level">Lv.{data.pet.level} · なかよし度 {data.pet.affection}% · 🪙 {data.pet.coins}</div></div></div><div className="room-actions"><button onClick={feedPet}>🍚 ごはん（2コイン）</button><button onClick={playPet}>🧶 あそぶ</button><button onClick={()=>notify("おやつをあげたよ！")}>🍪 おやつ</button><button onClick={()=>notify("やさしくブラッシングしたよ")}>🪮 お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}>🛏️ お昼寝</button></div><p className="notice">遊んだ後は、ときどき自分からお昼寝するよ。お昼寝中は起こさず、そっと見守ってね。</p></section>}
+      {page==="ペットのお部屋" && <section className="full-panel room"><div className="room-hero">{data.pet.displayMode === "photo" && data.pet.image ? <img className="pet-motion" src={petImage()} alt={`${data.pet.name}の写真`} onError={e=>e.currentTarget.style.display="none"}/> : <PetArtwork type={data.pet.type} sleeping={isSleeping} compact/>}<div><h2>{data.pet.name}のお部屋</h2><p>いっしょに遊んだり、ごはんをあげたりしよう。</p><div className="room-level">Lv.{data.pet.level} · なかよし度 {data.pet.affection}% · 🪙 {data.pet.coins}</div></div></div><div className="room-actions"><button onClick={feedPet}>🍚 ごはん（2コイン）</button><button onClick={playPet}>🧶 あそぶ</button><button onClick={()=>notify("おやつをあげたよ！")}>🍪 おやつ</button><button onClick={()=>notify("やさしくブラッシングしたよ")}>🪮 お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}>🛏️ お昼寝</button></div><p className="notice">遊んだ後は、ときどき自分からお昼寝するよ。お昼寝中は起こさず、そっと見守ってね。</p></section>}
 
       {page==="記録・レポート" && <section className="full-panel"><h2>▥ 記録・レポート</h2><div className="report-grid"><div><small>今日の集中時間</small><strong>{Math.floor(focusSeconds/60)}分</strong></div><div><small>今日の休憩時間</small><strong>{Math.floor(restSeconds/60)}分</strong></div><div><small>完了タスク</small><strong>{doneCount}件</strong></div><div><small>ペットのレベル</small><strong>Lv.{data.pet.level}</strong></div></div><h3>今日のセッション</h3>{todaySessions.length?todaySessions.map(s=><p className="session-row">{s.mode} · {Math.floor(s.seconds/60)}分 · {s.taskTitle||"タスク未選択"}</p>):<p className="notice">タイマーを使うと、ここに記録されるよ。</p>}</section>}
 
@@ -370,6 +372,35 @@ export default function App() {
     {petPicker && <div className="modal-backdrop" onClick={()=>setPetPicker(false)}><div className="modal" onClick={e=>e.stopPropagation()}><h2>いっしょに過ごすペット</h2><div className="pet-options">{Object.entries(petLabels).map(([type,label])=><button className={data.pet.type===type?"chosen":""} onClick={()=>{updatePet({type,image:""});}}><span>{petEmoji[type]}</span>{label}</button>)}</div><label>名前<input value={petName} onChange={e=>setPetName(e.target.value)}/></label><div className="pet-display-setting"><b>表示スタイル</b><div className="pet-display-options"><button type="button" className={(data.pet.displayMode||"illustration")==="illustration"?"chosen":""} onClick={()=>updatePet({displayMode:"illustration"})}>🎨 イラスト</button><button type="button" className={data.pet.displayMode==="photo"?"chosen":""} onClick={()=>updatePet({displayMode:"photo"})}>📷 写真</button></div></div><label>ペットの写真を登録（写真モードで表示）<input type="file" accept="image/*" onChange={e=>{const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>updatePet({image:reader.result,displayMode:"photo"});reader.readAsDataURL(f);}}/></label><p className="modal-help">写真モードは登録した写真をゆっくり動かし、イラストモードはペットごとのイラストをアニメーション表示するよ。</p><div className="modal-actions"><button className="soft-btn" onClick={()=>setPetPicker(false)}>閉じる</button><button className="add-btn" onClick={()=>{updatePet({name:petName||"うちの子"});setPetPicker(false);}}>保存</button></div></div></div>}
 
     {toast && <div className="toast">{toast}</div>}
+  </div>;
+}
+
+function PetArtwork({type="cat",sleeping=false,compact=false}) {
+  const palette = {
+    cat:["#f3a45f","#d98248","#ffe0b9","#e88e86"],
+    dog:["#c99568","#986743","#f1d1a8","#80563f"],
+    rabbit:["#f2e8df","#d8c8bd","#fffaf4","#e9a8b1"],
+    hamster:["#d9a45d","#b77c3d","#fff0d8","#e9a3a0"]
+  }[type] || ["#f3a45f","#d98248","#ffe0b9","#e88e86"];
+  const [body,shade,light,ear]=palette;
+  return <div className={"pet-art-wrap "+(compact?"compact ":"")+(sleeping?"sleeping":"")} role="img" aria-label={(petLabels[type]||"ペット")+"のイラスト"}>
+    <svg className="pet-art" viewBox="0 0 240 210" aria-hidden="true">
+      {type==="cat" && <path d="M65 85 L58 28 L100 61 Q120 52 140 61 L182 28 L175 90" fill={body} stroke={shade} strokeWidth="6" strokeLinejoin="round"/>}
+      {type==="dog" && <><path d="M78 72 Q35 15 38 68 Q44 110 86 105 M162 72 Q205 15 202 68 Q196 110 154 105" fill={shade}/></>}
+      {type==="rabbit" && <><path d="M91 83 Q55 -8 91 5 Q112 10 116 79 M132 79 Q137 -8 161 5 Q182 23 148 86" fill={body} stroke={shade} strokeWidth="5"/><path d="M91 57 Q78 8 91 17 Q105 37 108 67 M143 65 Q149 20 160 17 Q169 38 150 66" fill={ear}/></>}
+      {type==="hamster" && <><circle cx="77" cy="72" r="25" fill={ear}/><circle cx="163" cy="72" r="25" fill={ear}/></>}
+      <ellipse cx="120" cy="135" rx="73" ry="59" fill={body} stroke={shade} strokeWidth="5"/>
+      <circle cx="120" cy="83" r="53" fill={body} stroke={shade} strokeWidth="5"/>
+      {type==="cat" && <><path d="M85 43 L89 12 L111 35 M129 35 L153 12 L156 43" fill={body} stroke={shade} strokeWidth="5" strokeLinejoin="round"/><path d="M90 28 L93 18 L104 34 M138 34 L151 18 L150 29" fill={ear}/></>}
+      {type==="dog" && <ellipse cx="120" cy="103" rx="33" ry="25" fill={light}/>}
+      {type==="hamster" && <><circle cx="91" cy="105" r="22" fill={light}/><circle cx="149" cy="105" r="22" fill={light}/></>}
+      <ellipse cx="120" cy="151" rx="42" ry="34" fill={light}/>
+      <path d={sleeping?"M94 87 Q102 96 110 87 M130 87 Q138 96 146 87":"M97 85 Q102 76 107 85 M133 85 Q138 76 143 85"} fill="none" stroke="#513b38" strokeWidth="5" strokeLinecap="round"/>
+      <path d="M115 105 Q120 111 125 105 M120 111 Q109 122 101 114 M120 111 Q131 122 139 114" fill="none" stroke="#b96f73" strokeWidth="4" strokeLinecap="round"/>
+      <path d="M63 142 Q39 130 31 149 M177 142 Q201 130 209 149" fill="none" stroke={shade} strokeWidth="12" strokeLinecap="round"/>
+      <ellipse cx="88" cy="180" rx="20" ry="10" fill={shade}/><ellipse cx="152" cy="180" rx="20" ry="10" fill={shade}/>
+      {sleeping && <text x="176" y="24" fontSize="24" fontWeight="bold" fill="#fff" stroke="#a77c70" strokeWidth="1">Z z z</text>}
+    </svg>
   </div>;
 }
 
