@@ -266,8 +266,7 @@ export default function App() {
     notify("アラームを登録したよ。ブラウザを開いたまま使ってね。");
   }
   function petImage() {
-    if (data.pet.image) return data.pet.image;
-    return "/sleeping-pets.png";
+    return data.pet.image || "";
   }
 
   const nav = ["ホーム","タイマー","アラーム","タスク","ペットのお部屋","記録・レポート","設定"];
@@ -290,7 +289,7 @@ export default function App() {
         <div className="top-stats"><span>💗 なかよし Lv.{data.pet.level}</span><span>🪙 {data.pet.coins.toLocaleString()} <button className="plus" onClick={()=>notify("コインは勉強やタスク完了で増えるよ")}>＋</button></span><span>🏆 {Math.floor(data.pet.xp/10)}</span><button className="profile" onClick={()=>setAuthOpen(true)}>●</button></div>
       </header>
 
-      {(page==="ホーム" || page==="タイマー") && <div className="dashboard">
+      {page==="ホーム" && <div className="dashboard">
         <section className="center-column">
           <div className="pet-hero">
             <div className="hero-glow"></div>
@@ -299,23 +298,6 @@ export default function App() {
             {isSleeping && <div className="zzz">Z z z</div>}
             <div className="pet-caption"><b>{data.pet.name}</b><span>{isSleeping?"すやすやお昼寝中…":"今日もいっしょにがんばろう！"}</span></div>
             <button className="change-pet" onClick={()=>setPetPicker(true)}>ペットを変更</button>
-          </div>
-          <div className="timer-card">
-            <div className="timer-tabs">{["集中","休憩","カスタム"].map(m=><button className={timerMode===m?"selected":""} onClick={()=>{setTimerMode(m);setTimerStatus("idle");setElapsed(0);setRemaining(m==="集中"?1500:m==="休憩"?300:0);setHours("0");setMinutes(m==="集中"?"25":m==="休憩"?"5":"0");setSeconds("0");}}>{m==="集中"?"✦ ":m==="休憩"?"☕ ":"◌ "}{m}</button>)}</div>
-            <div className="timer-digits">{timerStatus==="overtime"?`+${fmt(elapsed)}`:fmt(shownSeconds)}</div>
-            <div className="timer-sub">{timerStatus==="overtime"?`${timerMode}終了からの経過時間`:timerStatus==="running"?"いっしょに集中中…":timerStatus==="paused"?"一時停止中":"時間を決めてスタートしよう"}</div>
-            <div className="time-inputs">
-              <label>時<input type="number" min="0" max="99" value={hours} onChange={e=>setHours(e.target.value)}/></label>
-              <label>分<input type="number" min="0" max="59" value={minutes} onChange={e=>setMinutes(e.target.value)}/></label>
-              <label>秒<input type="number" min="0" max="59" value={seconds} onChange={e=>setSeconds(e.target.value)}/></label>
-            </div>
-            <div className="timer-options"><label><input type="checkbox" checked={pomodoro} onChange={e=>setPomodoro(e.target.checked)}/> 集中後に自動休憩</label><span>休憩 <input type="number" min="1" max="60" value={breakMinutes} onChange={e=>setBreakMinutes(Number(e.target.value))}/> 分</span></div>
-            <div className="timer-actions">
-              {timerStatus==="running"? <button className="soft-btn" onClick={()=>setTimerStatus("paused")}>一時停止</button>:<button className="start-btn" onClick={startTimer}>{timerStatus==="paused"?"▶ 再開":"▶ 開始"}</button>}
-              {timerStatus==="overtime"?<button className="soft-btn" onClick={stopTimer}>記録して終了</button>:timerStatus==="paused"?<button className="soft-btn" onClick={()=>{setTimerStatus("idle");setElapsed(0);}}>リセット</button>:null}
-              {timerStatus==="idle" && <button className="tiny-reset" onClick={()=>{setRemaining(0);setHours("0");setMinutes("0");setSeconds("0");}}>クリア</button>}
-            </div>
-            <div className="sound-settings">🔔 終了音 <select value={soundRepeats} onChange={e=>setSoundRepeats(Number(e.target.value))}><option value="1">1回</option><option value="3">3回</option><option value="5">5回</option></select><span>音量</span><input type="range" min="10" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/><button onClick={()=>beep(Number(soundRepeats),volume/100)}>試聴</button></div>
           </div>
           <div className="quick-actions">
             <button onClick={feedPet}><span>🍚</span>ごはん</button><button onClick={playPet}><span>🧶</span>あそぶ</button><button onClick={()=>notify("おやつをあげたよ🍪")}><span>🍪</span>おやつ</button><button onClick={()=>notify("なでなで…気持ちよさそう！")}><span>🪮</span>お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}><span>🛏️</span>おやすみ</button>
@@ -341,6 +323,29 @@ export default function App() {
         <section className="today-card"><h3>▥ 今日のがんばり</h3><p>💗 集中 <b>{todaySessions.filter(s=>s.mode==="集中").length}回（{Math.floor(focusSeconds/60)}分）</b></p><p>☕ 休憩 <b>{todaySessions.filter(s=>s.mode==="休憩").length}回（{Math.floor(restSeconds/60)}分）</b></p><p>🐾 タスク完了 <b>{doneCount}/{data.tasks.length}件</b></p></section>
       </div>}
 
+
+      {page==="タイマー" && <section className="full-panel timer-workspace">
+        <div className="timer-page-heading"><div><span className="date">FOCUS TIME</span><h2>いっしょに集中しよう</h2><p>{data.pet.name}と一緒に、今日の一歩を進めよう。</p></div><div className="timer-pet-badge">{data.pet.image ? <img src={data.pet.image} alt="" onError={e=>e.currentTarget.style.display="none"}/> : <span>{petEmoji[data.pet.type]}</span>}<b>{data.pet.name}</b></div></div>
+        <div className="timer-task-select"><label htmlFor="timer-task">取り組むタスク</label><select id="timer-task" value={data.selectedTaskId||""} onChange={e=>patch({selectedTaskId:e.target.value})}><option value="">タスクを選ばずに集中</option>{openTasks.map(t=><option key={t.id} value={t.id}>{t.title}</option>)}</select><button className="soft-btn" onClick={()=>openNewTask()}>＋ タスク追加</button></div>
+                  <div className="timer-card">
+            <div className="timer-tabs">{["集中","休憩","カスタム"].map(m=><button className={timerMode===m?"selected":""} onClick={()=>{setTimerMode(m);setTimerStatus("idle");setElapsed(0);setRemaining(m==="集中"?1500:m==="休憩"?300:0);setHours("0");setMinutes(m==="集中"?"25":m==="休憩"?"5":"0");setSeconds("0");}}>{m==="集中"?"✦ ":m==="休憩"?"☕ ":"◌ "}{m}</button>)}</div>
+            <div className="timer-digits">{timerStatus==="overtime"?`+${fmt(elapsed)}`:fmt(shownSeconds)}</div>
+            <div className="timer-sub">{timerStatus==="overtime"?`${timerMode}終了からの経過時間`:timerStatus==="running"?"いっしょに集中中…":timerStatus==="paused"?"一時停止中":"時間を決めてスタートしよう"}</div>
+            <div className="time-inputs">
+              <label>時<input type="number" min="0" max="99" value={hours} onChange={e=>setHours(e.target.value)}/></label>
+              <label>分<input type="number" min="0" max="59" value={minutes} onChange={e=>setMinutes(e.target.value)}/></label>
+              <label>秒<input type="number" min="0" max="59" value={seconds} onChange={e=>setSeconds(e.target.value)}/></label>
+            </div>
+            <div className="timer-options"><label><input type="checkbox" checked={pomodoro} onChange={e=>setPomodoro(e.target.checked)}/> 集中後に自動休憩</label><span>休憩 <input type="number" min="1" max="60" value={breakMinutes} onChange={e=>setBreakMinutes(Number(e.target.value))}/> 分</span></div>
+            <div className="timer-actions">
+              {timerStatus==="running"? <button className="soft-btn" onClick={()=>setTimerStatus("paused")}>一時停止</button>:<button className="start-btn" onClick={startTimer}>{timerStatus==="paused"?"▶ 再開":"▶ 開始"}</button>}
+              {timerStatus==="overtime"?<button className="soft-btn" onClick={stopTimer}>記録して終了</button>:timerStatus==="paused"?<button className="soft-btn" onClick={()=>{setTimerStatus("idle");setElapsed(0);}}>リセット</button>:null}
+              {timerStatus==="idle" && <button className="tiny-reset" onClick={()=>{setRemaining(0);setHours("0");setMinutes("0");setSeconds("0");}}>クリア</button>}
+            </div>
+            <div className="sound-settings">🔔 終了音 <select value={soundRepeats} onChange={e=>setSoundRepeats(Number(e.target.value))}><option value="1">1回</option><option value="3">3回</option><option value="5">5回</option></select><span>音量</span><input type="range" min="10" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/><button onClick={()=>beep(Number(soundRepeats),volume/100)}>試聴</button></div>
+          </div>
+        <div className="timer-encouragement"><span>{petEmoji[data.pet.type]}</span><div><b>{data.pet.name}が応援しているよ</b><p>終わったら経験値とコインをゲット！</p></div></div>
+      </section>}
       {page==="タスク" && <section className="full-panel">
         <div className="panel-head"><h2>☑ タスク管理</h2><button className="add-btn" onClick={()=>openNewTask()}>＋ タスクを追加</button></div>
         <div className="task-view-switch"><button className={data.view==="list"?"on":""} onClick={()=>patch({view:"list"})}>☷ リスト</button><button className={data.view==="calendar"?"on":""} onClick={()=>patch({view:"calendar"})}>▦ カレンダー</button></div>
@@ -350,7 +355,7 @@ export default function App() {
 
       {page==="アラーム" && <section className="full-panel"><h2>♧ アラーム</h2><div className="alarm-form"><label>時刻<input type="time" value={alarmTime} onChange={e=>setAlarmTime(e.target.value)}/></label><label>音<select value={alarmSound} onChange={e=>setAlarmSound(e.target.value)}><option>ベル</option><option>チャイム</option><option>やさしい音</option></select></label><button className="add-btn" onClick={addAlarm}>＋ アラームを追加</button></div>{data.alarms.map(a=><div className="alarm-row"><b>{a.time}</b><span>{a.sound}</span><label><input type="checkbox" checked={a.enabled} onChange={e=>patch({alarms:data.alarms.map(x=>x.id===a.id?{...x,enabled:e.target.checked}:x)})}/> 有効</label><button onClick={()=>patch({alarms:data.alarms.filter(x=>x.id!==a.id)})}>削除</button></div>)}<p className="notice">※ ブラウザの仕様上、ページを閉じたり端末がスリープしたりすると、アラームが鳴らない場合があります。まずはページを開いたまま、音を有効にしてご利用ください。</p></section>}
 
-      {page==="ペットのお部屋" && <section className="full-panel room"><div className="room-hero"><img src={petImage()} onError={e=>e.currentTarget.style.display="none"}/><div><h2>{data.pet.name}のお部屋</h2><p>いっしょに遊んだり、ごはんをあげたりしよう。</p><div className="room-level">Lv.{data.pet.level} · なかよし度 {data.pet.affection}% · 🪙 {data.pet.coins}</div></div></div><div className="room-actions"><button onClick={feedPet}>🍚 ごはん（2コイン）</button><button onClick={playPet}>🧶 あそぶ</button><button onClick={()=>notify("おやつをあげたよ！")}>🍪 おやつ</button><button onClick={()=>notify("やさしくブラッシングしたよ")}>🪮 お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}>🛏️ お昼寝</button></div><p className="notice">遊んだ後は、ときどき自分からお昼寝するよ。お昼寝中は起こさず、そっと見守ってね。</p></section>}
+      {page==="ペットのお部屋" && <section className="full-panel room"><div className="room-hero">{data.pet.image ? <img src={petImage()} alt={`${data.pet.name}の写真`} onError={e=>e.currentTarget.style.display="none"}/> : <div className="room-pet-fallback" role="img" aria-label={`${petLabels[data.pet.type]}のイラスト`}>{petEmoji[data.pet.type]}</div>}<div><h2>{data.pet.name}のお部屋</h2><p>いっしょに遊んだり、ごはんをあげたりしよう。</p><div className="room-level">Lv.{data.pet.level} · なかよし度 {data.pet.affection}% · 🪙 {data.pet.coins}</div></div></div><div className="room-actions"><button onClick={feedPet}>🍚 ごはん（2コイン）</button><button onClick={playPet}>🧶 あそぶ</button><button onClick={()=>notify("おやつをあげたよ！")}>🍪 おやつ</button><button onClick={()=>notify("やさしくブラッシングしたよ")}>🪮 お手入れ</button><button onClick={()=>updatePet({sleepingUntil:Date.now()+60000,energy:Math.min(100,data.pet.energy+10)})}>🛏️ お昼寝</button></div><p className="notice">遊んだ後は、ときどき自分からお昼寝するよ。お昼寝中は起こさず、そっと見守ってね。</p></section>}
 
       {page==="記録・レポート" && <section className="full-panel"><h2>▥ 記録・レポート</h2><div className="report-grid"><div><small>今日の集中時間</small><strong>{Math.floor(focusSeconds/60)}分</strong></div><div><small>今日の休憩時間</small><strong>{Math.floor(restSeconds/60)}分</strong></div><div><small>完了タスク</small><strong>{doneCount}件</strong></div><div><small>ペットのレベル</small><strong>Lv.{data.pet.level}</strong></div></div><h3>今日のセッション</h3>{todaySessions.length?todaySessions.map(s=><p className="session-row">{s.mode} · {Math.floor(s.seconds/60)}分 · {s.taskTitle||"タスク未選択"}</p>):<p className="notice">タイマーを使うと、ここに記録されるよ。</p>}</section>}
 
@@ -361,7 +366,7 @@ export default function App() {
 
     {authOpen && <div className="modal-backdrop" onClick={()=>setAuthOpen(false)}><form className="modal" onSubmit={submitAuth} onClick={e=>e.stopPropagation()}><h2>{authMode==="register"?"アカウント登録":"ログイン"}</h2><p className="modal-help">アカウントを作ると、ペットやタスクを別の端末でも引き継げるようになります。</p><label>メールアドレス<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>パスワード（8文字以上）<input type="password" required minLength="8" value={password} onChange={e=>setPassword(e.target.value)}/></label>{authError&&<p className="error">{authError}</p>}<button className="add-btn full">{authMode==="register"?"登録してクラウド保存":"ログイン"}</button><button type="button" className="text-button" onClick={()=>{setAuthMode(authMode==="register"?"login":"register");setAuthError("");}}>{authMode==="register"?"すでにアカウントをお持ちの方：ログイン":"アカウントを新規登録"}</button></form></div>}
 
-    {petPicker && <div className="modal-backdrop" onClick={()=>setPetPicker(false)}><div className="modal" onClick={e=>e.stopPropagation()}><h2>いっしょに過ごすペット</h2><div className="pet-options">{Object.entries(petLabels).map(([type,label])=><button className={data.pet.type===type?"chosen":""} onClick={()=>updatePet({type})}><span>{petEmoji[type]}</span>{label}</button>)}</div><label>名前<input value={petName} onChange={e=>setPetName(e.target.value)}/></label><label>写真を選ぶ<input type="file" accept="image/*" onChange={e=>{const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>updatePet({image:reader.result});reader.readAsDataURL(f);}}/></label><div className="modal-actions"><button className="soft-btn" onClick={()=>setPetPicker(false)}>閉じる</button><button className="add-btn" onClick={()=>{updatePet({name:petName||"うちの子"});setPetPicker(false);}}>保存</button></div></div></div>}
+    {petPicker && <div className="modal-backdrop" onClick={()=>setPetPicker(false)}><div className="modal" onClick={e=>e.stopPropagation()}><h2>いっしょに過ごすペット</h2><div className="pet-options">{Object.entries(petLabels).map(([type,label])=><button className={data.pet.type===type?"chosen":""} onClick={()=>{updatePet({type,image:""});}}><span>{petEmoji[type]}</span>{label}</button>)}</div><label>名前<input value={petName} onChange={e=>setPetName(e.target.value)}/></label><label>写真を選ぶ<input type="file" accept="image/*" onChange={e=>{const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>updatePet({image:reader.result});reader.readAsDataURL(f);}}/></label><div className="modal-actions"><button className="soft-btn" onClick={()=>setPetPicker(false)}>閉じる</button><button className="add-btn" onClick={()=>{updatePet({name:petName||"うちの子"});setPetPicker(false);}}>保存</button></div></div></div>}
 
     {toast && <div className="toast">{toast}</div>}
   </div>;
