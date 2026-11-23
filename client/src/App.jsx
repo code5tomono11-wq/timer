@@ -293,8 +293,7 @@ export default function App() {
         <section className="center-column">
           <div className="pet-hero">
             <div className="hero-glow"></div>
-            <img className={`hero-pet ${isSleeping?"sleeping":""}`} src={petImage()} onError={e=>{e.currentTarget.style.display="none";}} alt={`${data.pet.name}の写真`}/>
-            {!data.pet.image && <div className="fallback-pet">{petEmoji[data.pet.type]}</div>}
+            {data.pet.image ? <img className={`hero-pet ${isSleeping?"sleeping":""}`} src={petImage()} onError={e=>{e.currentTarget.style.display="none";}} alt={`${data.pet.name}の写真`}/> : <div className={`fallback-pet pet-${data.pet.type}`} role="img" aria-label={`${petLabels[data.pet.type]}のイラスト`}>{petEmoji[data.pet.type]}</div>}
             {isSleeping && <div className="zzz">Z z z</div>}
             <div className="pet-caption"><b>{data.pet.name}</b><span>{isSleeping?"すやすやお昼寝中…":"今日もいっしょにがんばろう！"}</span></div>
             <button className="change-pet" onClick={()=>setPetPicker(true)}>ペットを変更</button>
