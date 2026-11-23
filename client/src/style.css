@@ -87,3 +87,15 @@
 @keyframes photoBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
 @keyframes photoSleep{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.025) translateY(3px)}}
 @media(prefers-reduced-motion:reduce){.pet-motion,.hero-pet.pet-motion,.room-pet-fallback.pet-motion{animation:none!important}}
+
+/* Custom pet artwork and expanded care shortcuts */
+.pet-art-wrap{position:absolute;width:210px;height:210px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 42% 32%,#fffaf1,#f2d9c8 75%);box-shadow:0 14px 28px #6d493022;animation:petFloat 3.4s ease-in-out infinite;z-index:1}
+.pet-art{width:94%;height:94%;overflow:visible;filter:drop-shadow(0 5px 4px #754d3622)}
+.pet-art-wrap.sleeping{animation:petSleep 4.2s ease-in-out infinite}
+.pet-art-wrap.compact{position:relative;width:220px;height:170px;flex:0 0 220px;border-radius:20px}
+.quick-actions{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.quick-actions button{min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(145deg,#fffefd,#fff6f0);box-shadow:0 4px 12px #7b50420a;transition:transform .18s,box-shadow .18s}
+.quick-actions button:hover{transform:translateY(-3px);box-shadow:0 8px 18px #7b50441a}
+.quick-actions span{font-size:30px;margin:0}
+@media(max-width:700px){.quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.pet-art-wrap{width:165px;height:165px}.pet-art-wrap.compact{width:100%;height:190px}}
+@media(prefers-reduced-motion:reduce){.pet-art-wrap{animation:none!important}}
