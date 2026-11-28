@@ -131,3 +131,44 @@
 .no-cat-mode .soft-btn{background:#eaf2f0;color:#4d7374}
 .no-cat-mode .pet-select{border-color:#dce9e7}
 .no-cat-mode .top-stats>span{border-color:#e0ece9}
+
+/* Strong neutral theme overrides: apply to every pink UI component */
+.app-shell.no-cat-mode{
+  background:linear-gradient(135deg,#f7fbfa,#e8f1ef)!important;
+  color:#344e50;
+}
+.app-shell.no-cat-mode .sidebar{background:#f7fbfa!important;border-color:#d5e4e1!important}
+.app-shell.no-cat-mode .brand{color:#315d64!important}
+.app-shell.no-cat-mode .paw{color:#659caa!important}
+.app-shell.no-cat-mode .tagline,.app-shell.no-cat-mode .date{color:#718b8b!important}
+.app-shell.no-cat-mode .nav-item{color:#557174}
+.app-shell.no-cat-mode .nav-item.active{background:#d7ebe7!important;color:#315f63!important}
+.app-shell.no-cat-mode .pet-select,
+.app-shell.no-cat-mode .sync,
+.app-shell.no-cat-mode .account-btn{border-color:#d7e6e2!important}
+.app-shell.no-cat-mode .pet-hero{background:linear-gradient(145deg,#e7f2ee,#c8ded7 60%,#abc9bf)!important}
+.app-shell.no-cat-mode .pet-hero:after{background:linear-gradient(0deg,#547f75aa,transparent)!important}
+.app-shell.no-cat-mode .timer-card,
+.app-shell.no-cat-mode .task-panel,
+.app-shell.no-cat-mode .pet-status,
+.app-shell.no-cat-mode .today-card,
+.app-shell.no-cat-mode .full-panel{border-color:#d7e6e2!important}
+.app-shell.no-cat-mode .start-btn,
+.app-shell.no-cat-mode .add-btn{background:#659caa!important;color:#fff!important;box-shadow:0 5px 12px #659caa33}
+.app-shell.no-cat-mode .timer-tabs button.selected,
+.app-shell.no-cat-mode .filter-tabs button.on,
+.app-shell.no-cat-mode .task-view-switch button.on,
+.app-shell.no-cat-mode .check.checked{background:#659caa!important;border-color:#659caa!important;color:#fff!important}
+.app-shell.no-cat-mode .soft-btn,
+.app-shell.no-cat-mode .timer-tabs button,
+.app-shell.no-cat-mode .filter-tabs button,
+.app-shell.no-cat-mode .task-view-switch button{background:#e8f1ef!important;color:#4d7374!important}
+.app-shell.no-cat-mode .quick-actions button{border-color:#d7e6e2!important;background:linear-gradient(145deg,#fff,#f0f7f5)!important}
+.app-shell.no-cat-mode .timer-digits{color:#345d66!important}
+.app-shell.no-cat-mode .timer-encouragement{background:#edf6f3!important;border-color:#d7e6e2!important}
+.app-shell.no-cat-mode .top-stats>span,
+.app-shell.no-cat-mode .profile{border:1px solid #d7e6e2}
+.app-shell.no-cat-mode .tag{filter:saturate(.65)}
+.app-shell.no-cat-mode .change-pet{background:#f8fffd!important;color:#42696b!important}
+.app-shell.no-cat-mode .settings-row{border-color:#d7e6e2!important}
+.app-shell.no-cat-mode .full-panel h2{color:#345d66}
