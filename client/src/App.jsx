@@ -60,7 +60,7 @@ function todayKey() { return new Date().toISOString().slice(0,10); }
 
 export default function App() {
   const [data, setData] = useState(readLocal);
-  const noPetMode = Boolean(data.noPetMode);
+  const noPetMode = Boolean(data.noCatMode);
   const [page, setPage] = useState("ホーム");
   const [account, setAccount] = useState(() => localStorage.getItem("pet-timer-user") || "");
   const [token, setToken] = useState(() => localStorage.getItem("pet-timer-token") || "");
@@ -128,7 +128,7 @@ export default function App() {
           setTimerStatus("overtime");
           setElapsed(0);
           beep(Number(soundRepeats), volume / 100);
-          setToast(`${timerMode}の時間だよ！ ${data.pet.name}が応援しているよ${noCatMode?"！":"🐾"}`);
+          setToast(`${timerMode}の時間だよ！ ${data.pet.name}が応援しているよ${noPetMode?"！":"🐾"}`);
           return 0;
         }
         return v - 1;
@@ -160,7 +160,7 @@ export default function App() {
         if (alarm.enabled && alarm.time === current && !firedAlarmsRef.current[firedKey]) {
           firedAlarmsRef.current[firedKey] = true;
           beep(5, volume / 100);
-          notify(`⏰ アラームだよ！ ${data.pet.name}からのお知らせ${noCatMode?"！":"🐾"}`);
+          notify(`⏰ アラームだよ！ ${data.pet.name}からのお知らせ${noPetMode?"！":"🐾"}`);
         }
       });
     };
@@ -209,7 +209,7 @@ export default function App() {
   }
   function toggleDone(task) {
     setData(d => ({ ...d, tasks: d.tasks.map(t => t.id === task.id ? { ...t, done: !t.done } : t), pet: task.done ? d.pet : { ...d.pet, coins: d.pet.coins+2, xp: d.pet.xp+5, affection: Math.min(100,d.pet.affection+1) } }));
-    if (!task.done) notify(noCatMode?"タスク完了！ペットが喜んでいるよ！":"タスク完了！ペットが喜んでいるよ🐾");
+    if (!task.done) notify(noPetMode?"タスク完了！ペットが喜んでいるよ！":"タスク完了！ペットが喜んでいるよ🐾");
   }
   function openNewTask(task = null) {
     setEditingTask(task);
@@ -281,12 +281,12 @@ export default function App() {
   const shownSeconds = timerStatus === "running" ? remaining : timerStatus === "overtime" ? elapsed : remaining;
   const dateText = new Intl.DateTimeFormat("ja-JP", { month:"long", day:"numeric", weekday:"long" }).format(new Date());
 
-  return <div className={`app-shell ${noCatMode?"no-cat-mode":""}`}>
+  return <div className={`app-shell ${noPetMode?"no-pet-mode":""}`}>
     <aside className="sidebar">
-      <div className="brand"><span className="paw">{noCatMode?"◷":"🐾"}</span><span>{noCatMode?"study timer":"pet timer"}</span></div>
-      <p className="tagline">{noCatMode?<>いっしょに集中する、<br/>ペットの学習タイマー</>:<>いっしょにがんばる、<br/>ペットの学習タイマー</>}</p>
-      <button className="pet-select" onClick={() => setPetPicker(true)}><img className="avatar pet-avatar-photo" src={petImage()} alt=""/><b>{data.pet.name}</b><span className="chevron">⌄</span></button>
-      <nav>{nav.map((n,i)=><button key={n} className={page===n?"nav-item active":"nav-item"} onClick={()=>setPage(n)}><span>{(noCatMode?["⌂","◷","♧","☑","⌂","▥","⚙"]:["⌂","◷","♧","☑","🐾","▥","⚙"])[i]}</span>{n}</button>)}</nav>
+      <div className="brand"><span className="paw">{noPetMode?"◷":"🐾"}</span><span>{noPetMode?"study timer":"pet timer"}</span></div>
+      <p className="tagline">{noPetMode?<>集中とタスク管理を、<br/>シンプルに</>:<>いっしょにがんばる、<br/>ペットの学習タイマー</>}</p>
+      {!noPetMode && <button className="pet-select" onClick={() => setPetPicker(true)}><img className="avatar pet-avatar-photo" src={petImage()} alt=""/><b>{data.pet.name}</b><span className="chevron">⌄</span></button>}
+      <nav>{nav.filter(n=>!noPetMode||n!=="ペットのお部屋").map((n,i)=><button key={n} className={page===n?"nav-item active":"nav-item"} onClick={()=>setPage(n)}><span>{(noPetMode?["⌂","◷","♧","☑","▥","⚙"]:["⌂","◷","♧","☑","🐾","▥","⚙"])[i]}</span>{n}</button>)}</nav>
       <div className="sync"><span className="cloud">☁</span><div><b>{syncLabel}</b><small>{account || "ゲストモード"}</small></div></div>
       <button className="account-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"アカウント登録・ログイン"}</button>
     </aside>
@@ -330,7 +330,7 @@ export default function App() {
           <img className="status-avatar pet-avatar-photo" src={petImage()} alt=""/><div className="status-name"><b>{data.pet.name} のようす</b><small>{isSleeping?"すやすやお昼寝中":"ごきげんだよ！"}</small></div>
           <div className="meters"><Meter label="ごきげん" value={data.pet.mood} color="#e97c98"/><Meter label="まんぷく" value={data.pet.hunger} color="#f4b63e"/><Meter label="げんき" value={data.pet.energy} color="#55b8df"/></div>
         </section>}
-        <section className="today-card"><h3>▥ 今日のがんばり</h3><p>💗 集中 <b>{todaySessions.filter(s=>s.mode==="集中").length}回（{Math.floor(focusSeconds/60)}分）</b></p><p>☕ 休憩 <b>{todaySessions.filter(s=>s.mode==="休憩").length}回（{Math.floor(restSeconds/60)}分）</b></p><p>{noCatMode?"✓":"🐾"} タスク完了 <b>{doneCount}/{data.tasks.length}件</b></p></section>
+        <section className="today-card"><h3>▥ 今日のがんばり</h3><p>💗 集中 <b>{todaySessions.filter(s=>s.mode==="集中").length}回（{Math.floor(focusSeconds/60)}分）</b></p><p>☕ 休憩 <b>{todaySessions.filter(s=>s.mode==="休憩").length}回（{Math.floor(restSeconds/60)}分）</b></p><p>{noPetMode?"✓":"🐾"} タスク完了 <b>{doneCount}/{data.tasks.length}件</b></p></section>
       </div>}
 
 
@@ -354,7 +354,7 @@ export default function App() {
             </div>
             <div className="sound-settings">🔔 終了音 <select value={soundRepeats} onChange={e=>setSoundRepeats(Number(e.target.value))}><option value="1">1回</option><option value="3">3回</option><option value="5">5回</option></select><span>音量</span><input type="range" min="10" max="100" value={volume} onChange={e=>setVolume(Number(e.target.value))}/><button onClick={()=>beep(Number(soundRepeats),volume/100)}>試聴</button></div>
           </div>
-        <div className="timer-encouragement"><img className="pet-avatar-photo" src={petImage()} alt=""/><div><b>{data.pet.name}が応援しているよ</b><p>{noCatMode?"集中した分だけ経験値とコインをゲット！":"終わったら経験値とコインをゲット！"}</p></div></div>
+        {!noPetMode&&<div className="timer-encouragement"><img className="pet-avatar-photo" src={petImage()} alt=""/><div><b>{data.pet.name}が応援しているよ</b><p>終わったら経験値とコインをゲット！</p></div></div>}
       </section>}
       {page==="タスク" && <section className="full-panel">
         <div className="panel-head"><h2>☑ タスク管理</h2><button className="add-btn" onClick={()=>openNewTask()}>＋ タスクを追加</button></div>
@@ -369,14 +369,14 @@ export default function App() {
 
       {page==="記録・レポート" && <section className="full-panel"><h2>▥ 記録・レポート</h2><div className="report-grid"><div><small>今日の集中時間</small><strong>{Math.floor(focusSeconds/60)}分</strong></div><div><small>今日の休憩時間</small><strong>{Math.floor(restSeconds/60)}分</strong></div><div><small>完了タスク</small><strong>{doneCount}件</strong></div>{!noPetMode&&<div><small>ペットのレベル</small><strong>Lv.{data.pet.level}</strong></div>}</div><h3>今日のセッション</h3>{todaySessions.length?todaySessions.map(s=><p className="session-row">{s.mode} · {Math.floor(s.seconds/60)}分 · {s.taskTitle||"タスク未選択"}</p>):<p className="notice">タイマーを使うと、ここに記録されるよ。</p>}</section>}
 
-      {page==="設定" && <section className="full-panel"><h2>⚙ 設定</h2><div className="settings-row"><div><b>表示デザイン</b><p>{noCatMode?"猫要素なし・シンプルモード":"ペットモード（ピンクデザイン）"}</p></div><button className="soft-btn" onClick={()=>{if(!noCatMode&&data.pet.type==="cat")updatePet({type:"dog",image:""});patch({noCatMode:!noCatMode});notify(!noCatMode?"猫要素なしモードに切り替えたよ":"ペットモードに戻したよ");}}>{noCatMode?"ペットデザインに戻す":"猫要素なしにする"}</button></div><div className="settings-row"><div><b>アカウント・クラウド保存</b><p>{account||"ゲスト利用中"}</p></div><button className="add-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"登録・ログイン"}</button></div><div className="settings-row"><div><b>データのバックアップ</b><p>タスク・ペット・設定をJSONファイルで保存</p></div><button className="soft-btn" onClick={exportBackup}>バックアップを書き出す</button></div>{!noPetMode&&<div className="settings-row"><div><b>ペットの名前・種類・写真</b><p>名前や種類、写真を変更できるよ。</p></div><button className="soft-btn" onClick={()=>setPetPicker(true)}>変更</button></div>}<div className="settings-row"><div><b>アラームについて</b><p>ブラウザを閉じた状態での鳴動は保証されません。</p></div></div></section>}
+      {page==="設定" && <section className="full-panel"><h2>⚙ 設定</h2><div className="settings-row"><div><b>表示デザイン</b><p>{noPetMode?"ペットなし・学習集中モード":"ペットあり・学習サポートモード"}</p></div><button className="soft-btn" onClick={()=>{if(!noPetMode&&data.pet.type==="cat")updatePet({type:"dog",image:""});patch({noPetMode:!noPetMode});notify(!noPetMode?"猫要素なしモードに切り替えたよ":"ペットモードに戻したよ");}}>{noPetMode?"ペットデザインに戻す":"猫要素なしにする"}</button></div><div className="settings-row"><div><b>アカウント・クラウド保存</b><p>{account||"ゲスト利用中"}</p></div><button className="add-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"登録・ログイン"}</button></div><div className="settings-row"><div><b>データのバックアップ</b><p>タスク・ペット・設定をJSONファイルで保存</p></div><button className="soft-btn" onClick={exportBackup}>バックアップを書き出す</button></div>{!noPetMode&&<div className="settings-row"><div><b>ペットの名前・種類・写真</b><p>名前や種類、写真を変更できるよ。</p></div><button className="soft-btn" onClick={()=>setPetPicker(true)}>変更</button></div>}<div className="settings-row"><div><b>アラームについて</b><p>ブラウザを閉じた状態での鳴動は保証されません。</p></div></div></section>}
     </main>
 
     {taskModal && <div className="modal-backdrop" onClick={()=>setTaskModal(false)}><form className="modal" onSubmit={saveTask} onClick={e=>e.stopPropagation()}><h2>{editingTask?"タスクを編集":"タスクを追加"}</h2><label>タスク名<input autoFocus value={taskTitle} onChange={e=>setTaskTitle(e.target.value)} placeholder="例：簿記論の講義を見る"/></label><label>タグ（複数選択）<div className="tag-picker">{data.tags.map(t=><button type="button" className={taskTags.includes(t.name)?"picked":""} style={{background:t.color}} onClick={()=>setTaskTags(v=>v.includes(t.name)?v.filter(x=>x!==t.name):[...v,t.name])}>{t.name}</button>)}</div></label><div className="form-grid"><label>優先順位<select value={taskPriority} onChange={e=>setTaskPriority(e.target.value)}><option>高</option><option>中</option><option>低</option></select></label><label>予定時間（分）<input type="number" min="0" value={taskMinutes} onChange={e=>setTaskMinutes(e.target.value)}/></label></div><label>期限<input type="datetime-local" value={taskDue} onChange={e=>setTaskDue(e.target.value)}/></label><div className="modal-actions"><button type="button" className="soft-btn" onClick={()=>setTaskModal(false)}>キャンセル</button><button className="add-btn">保存</button></div></form></div>}
 
     {authOpen && <div className="modal-backdrop" onClick={()=>setAuthOpen(false)}><form className="modal" onSubmit={submitAuth} onClick={e=>e.stopPropagation()}><h2>{authMode==="register"?"アカウント登録":"ログイン"}</h2><p className="modal-help">アカウントを作ると、ペットやタスクを別の端末でも引き継げるようになります。</p><label>メールアドレス<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>パスワード（8文字以上）<input type="password" required minLength="8" value={password} onChange={e=>setPassword(e.target.value)}/></label>{authError&&<p className="error">{authError}</p>}<button className="add-btn full">{authMode==="register"?"登録してクラウド保存":"ログイン"}</button><button type="button" className="text-button" onClick={()=>{setAuthMode(authMode==="register"?"login":"register");setAuthError("");}}>{authMode==="register"?"すでにアカウントをお持ちの方：ログイン":"アカウントを新規登録"}</button></form></div>}
 
-    {!noPetMode && petPicker && <div className="modal-backdrop" onClick={()=>setPetPicker(false)}><div className="modal" onClick={e=>e.stopPropagation()}><h2>いっしょに過ごすペット</h2><div className="pet-options">{Object.entries(petLabels).filter(([type])=>!noCatMode||type!=="cat").map(([type,label])=><button className={data.pet.type===type?"chosen":""} onClick={()=>{updatePet({type,image:""});}}><img className="pet-option-photo" src={petDefaultPhotos[type]} alt=""/>{label}</button>)}</div><label>名前<input value={petName} onChange={e=>setPetName(e.target.value)}/></label><label>ペットの写真を選ぶ<input type="file" accept="image/*" onChange={e=>{const input=e.currentTarget;const f=input.files?.[0];if(!f)return;if(!f.type.startsWith("image/")){notify("画像ファイルを選んでね");input.value="";return;}if(f.size>20*1024*1024){notify("20MB以下の写真を選んでね");input.value="";return;}const reader=new FileReader();reader.onerror=()=>{notify("写真を読み込めなかったよ。もう一度選んでね");input.value="";};reader.onload=()=>{const img=new Image();img.onerror=()=>{notify("この写真形式は読み込めなかったよ。JPEGかPNGを試してね");input.value="";};img.onload=()=>{try{const max=720,scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("canvas");ctx.drawImage(img,0,0,canvas.width,canvas.height);const compressed=canvas.toDataURL("image/jpeg",0.68);updatePet({image:compressed});notify("写真を登録したよ！ホームに反映したよ");}catch(err){notify("写真を保存できなかったよ。別の画像を試してね");}input.value="";};img.src=String(reader.result);};reader.readAsDataURL(f);}}/></label><p className="modal-help">ペットを選ぶだけで写真が自動表示されるよ。自分の写真にしたいときだけ、下からアップロードしてね。</p><div className="modal-actions"><button className="soft-btn" onClick={()=>setPetPicker(false)}>閉じる</button><button className="add-btn" onClick={()=>{updatePet({name:petName||"うちの子"});setPetPicker(false);}}>保存</button></div></div></div>}
+    {!noPetMode && petPicker && <div className="modal-backdrop" onClick={()=>setPetPicker(false)}><div className="modal" onClick={e=>e.stopPropagation()}><h2>いっしょに過ごすペット</h2><div className="pet-options">{Object.entries(petLabels).filter(([type])=>!noPetMode||type!=="cat").map(([type,label])=><button className={data.pet.type===type?"chosen":""} onClick={()=>{updatePet({type,image:""});}}><img className="pet-option-photo" src={petDefaultPhotos[type]} alt=""/>{label}</button>)}</div><label>名前<input value={petName} onChange={e=>setPetName(e.target.value)}/></label><label>ペットの写真を選ぶ<input type="file" accept="image/*" onChange={e=>{const input=e.currentTarget;const f=input.files?.[0];if(!f)return;if(!f.type.startsWith("image/")){notify("画像ファイルを選んでね");input.value="";return;}if(f.size>20*1024*1024){notify("20MB以下の写真を選んでね");input.value="";return;}const reader=new FileReader();reader.onerror=()=>{notify("写真を読み込めなかったよ。もう一度選んでね");input.value="";};reader.onload=()=>{const img=new Image();img.onerror=()=>{notify("この写真形式は読み込めなかったよ。JPEGかPNGを試してね");input.value="";};img.onload=()=>{try{const max=720,scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext("2d");if(!ctx)throw new Error("canvas");ctx.drawImage(img,0,0,canvas.width,canvas.height);const compressed=canvas.toDataURL("image/jpeg",0.68);updatePet({image:compressed});notify("写真を登録したよ！ホームに反映したよ");}catch(err){notify("写真を保存できなかったよ。別の画像を試してね");}input.value="";};img.src=String(reader.result);};reader.readAsDataURL(f);}}/></label><p className="modal-help">ペットを選ぶだけで写真が自動表示されるよ。自分の写真にしたいときだけ、下からアップロードしてね。</p><div className="modal-actions"><button className="soft-btn" onClick={()=>setPetPicker(false)}>閉じる</button><button className="add-btn" onClick={()=>{updatePet({name:petName||"うちの子"});setPetPicker(false);}}>保存</button></div></div></div>}
 
     {toast && <div className="toast">{toast}</div>}
   </div>;
