@@ -116,3 +116,18 @@
 .avatar.pet-avatar-photo{width:37px;height:37px;flex:0 0 37px}
 .status-avatar.pet-avatar-photo{width:48px;height:48px;flex:0 0 48px}
 .timer-encouragement>.pet-avatar-photo{width:48px;height:48px;border-radius:14px;flex:0 0 48px}
+
+/* Neutral design option without cat/paw branding */
+.app-shell.no-cat-mode{--accent:#659caa;--accent-dark:#477f8d;--pink:#d9e9e8;background:#f3f7f6}
+.no-cat-mode .sidebar{background:#f8fbfa;border-color:#dce9e7}
+.no-cat-mode .brand{color:#345d66}
+.no-cat-mode .paw{color:#659caa}
+.no-cat-mode .tagline{color:#718b8b}
+.no-cat-mode .nav-item.active{background:#dcefed;color:#356d73}
+.no-cat-mode .pet-hero{background:linear-gradient(145deg,#e5f0ec,#c2d8d2 58%,#a8c4bb)}
+.no-cat-mode .pet-hero:after{background:linear-gradient(0deg,#789c91aa,transparent)}
+.no-cat-mode .quick-actions button,.no-cat-mode .task-panel,.no-cat-mode .full-panel{border-color:#dce9e7}
+.no-cat-mode .add-btn{background:#659caa;color:white}
+.no-cat-mode .soft-btn{background:#eaf2f0;color:#4d7374}
+.no-cat-mode .pet-select{border-color:#dce9e7}
+.no-cat-mode .top-stats>span{border-color:#e0ece9}
