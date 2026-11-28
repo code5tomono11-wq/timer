@@ -118,57 +118,59 @@
 .timer-encouragement>.pet-avatar-photo{width:48px;height:48px;border-radius:14px;flex:0 0 48px}
 
 /* Neutral design option without cat/paw branding */
-.app-shell.no-cat-mode{--accent:#659caa;--accent-dark:#477f8d;--pink:#d9e9e8;background:#f3f7f6}
-.no-cat-mode .sidebar{background:#f8fbfa;border-color:#dce9e7}
-.no-cat-mode .brand{color:#345d66}
-.no-cat-mode .paw{color:#659caa}
-.no-cat-mode .tagline{color:#718b8b}
-.no-cat-mode .nav-item.active{background:#dcefed;color:#356d73}
-.no-cat-mode .pet-hero{background:linear-gradient(145deg,#e5f0ec,#c2d8d2 58%,#a8c4bb)}
-.no-cat-mode .pet-hero:after{background:linear-gradient(0deg,#789c91aa,transparent)}
-.no-cat-mode .quick-actions button,.no-cat-mode .task-panel,.no-cat-mode .full-panel{border-color:#dce9e7}
-.no-cat-mode .add-btn{background:#659caa;color:white}
-.no-cat-mode .soft-btn{background:#eaf2f0;color:#4d7374}
-.no-cat-mode .pet-select{border-color:#dce9e7}
-.no-cat-mode .top-stats>span{border-color:#e0ece9}
+.app-shell.no-pet-mode{--accent:#659caa;--accent-dark:#477f8d;--pink:#d9e9e8;background:#f3f7f6}
+.no-pet-mode .sidebar{background:#f8fbfa;border-color:#dce9e7}
+.no-pet-mode .brand{color:#345d66}
+.no-pet-mode .paw{color:#659caa}
+.no-pet-mode .tagline{color:#718b8b}
+.no-pet-mode .nav-item.active{background:#dcefed;color:#356d73}
+.no-pet-mode .pet-hero{background:linear-gradient(145deg,#e5f0ec,#c2d8d2 58%,#a8c4bb)}
+.no-pet-mode .pet-hero:after{background:linear-gradient(0deg,#789c91aa,transparent)}
+.no-pet-mode .quick-actions button,.no-pet-mode .task-panel,.no-pet-mode .full-panel{border-color:#dce9e7}
+.no-pet-mode .add-btn{background:#659caa;color:white}
+.no-pet-mode .soft-btn{background:#eaf2f0;color:#4d7374}
+.no-pet-mode .pet-select{border-color:#dce9e7}
+.no-pet-mode .top-stats>span{border-color:#e0ece9}
 
 /* Strong neutral theme overrides: apply to every pink UI component */
-.app-shell.no-cat-mode{
+.app-shell.no-pet-mode{
   background:linear-gradient(135deg,#f7fbfa,#e8f1ef)!important;
   color:#344e50;
 }
-.app-shell.no-cat-mode .sidebar{background:#f7fbfa!important;border-color:#d5e4e1!important}
-.app-shell.no-cat-mode .brand{color:#315d64!important}
-.app-shell.no-cat-mode .paw{color:#659caa!important}
-.app-shell.no-cat-mode .tagline,.app-shell.no-cat-mode .date{color:#718b8b!important}
-.app-shell.no-cat-mode .nav-item{color:#557174}
-.app-shell.no-cat-mode .nav-item.active{background:#d7ebe7!important;color:#315f63!important}
-.app-shell.no-cat-mode .pet-select,
-.app-shell.no-cat-mode .sync,
-.app-shell.no-cat-mode .account-btn{border-color:#d7e6e2!important}
-.app-shell.no-cat-mode .pet-hero{background:linear-gradient(145deg,#e7f2ee,#c8ded7 60%,#abc9bf)!important}
-.app-shell.no-cat-mode .pet-hero:after{background:linear-gradient(0deg,#547f75aa,transparent)!important}
-.app-shell.no-cat-mode .timer-card,
-.app-shell.no-cat-mode .task-panel,
-.app-shell.no-cat-mode .pet-status,
-.app-shell.no-cat-mode .today-card,
-.app-shell.no-cat-mode .full-panel{border-color:#d7e6e2!important}
-.app-shell.no-cat-mode .start-btn,
-.app-shell.no-cat-mode .add-btn{background:#659caa!important;color:#fff!important;box-shadow:0 5px 12px #659caa33}
-.app-shell.no-cat-mode .timer-tabs button.selected,
-.app-shell.no-cat-mode .filter-tabs button.on,
-.app-shell.no-cat-mode .task-view-switch button.on,
-.app-shell.no-cat-mode .check.checked{background:#659caa!important;border-color:#659caa!important;color:#fff!important}
-.app-shell.no-cat-mode .soft-btn,
-.app-shell.no-cat-mode .timer-tabs button,
-.app-shell.no-cat-mode .filter-tabs button,
-.app-shell.no-cat-mode .task-view-switch button{background:#e8f1ef!important;color:#4d7374!important}
-.app-shell.no-cat-mode .quick-actions button{border-color:#d7e6e2!important;background:linear-gradient(145deg,#fff,#f0f7f5)!important}
-.app-shell.no-cat-mode .timer-digits{color:#345d66!important}
-.app-shell.no-cat-mode .timer-encouragement{background:#edf6f3!important;border-color:#d7e6e2!important}
-.app-shell.no-cat-mode .top-stats>span,
-.app-shell.no-cat-mode .profile{border:1px solid #d7e6e2}
-.app-shell.no-cat-mode .tag{filter:saturate(.65)}
-.app-shell.no-cat-mode .change-pet{background:#f8fffd!important;color:#42696b!important}
-.app-shell.no-cat-mode .settings-row{border-color:#d7e6e2!important}
-.app-shell.no-cat-mode .full-panel h2{color:#345d66}
+.app-shell.no-pet-mode .sidebar{background:#f7fbfa!important;border-color:#d5e4e1!important}
+.app-shell.no-pet-mode .brand{color:#315d64!important}
+.app-shell.no-pet-mode .paw{color:#659caa!important}
+.app-shell.no-pet-mode .tagline,.app-shell.no-pet-mode .date{color:#718b8b!important}
+.app-shell.no-pet-mode .nav-item{color:#557174}
+.app-shell.no-pet-mode .nav-item.active{background:#d7ebe7!important;color:#315f63!important}
+.app-shell.no-pet-mode .pet-select,
+.app-shell.no-pet-mode .sync,
+.app-shell.no-pet-mode .account-btn{border-color:#d7e6e2!important}
+.app-shell.no-pet-mode .pet-hero{background:linear-gradient(145deg,#e7f2ee,#c8ded7 60%,#abc9bf)!important}
+.app-shell.no-pet-mode .pet-hero:after{background:linear-gradient(0deg,#547f75aa,transparent)!important}
+.app-shell.no-pet-mode .timer-card,
+.app-shell.no-pet-mode .task-panel,
+.app-shell.no-pet-mode .pet-status,
+.app-shell.no-pet-mode .today-card,
+.app-shell.no-pet-mode .full-panel{border-color:#d7e6e2!important}
+.app-shell.no-pet-mode .start-btn,
+.app-shell.no-pet-mode .add-btn{background:#659caa!important;color:#fff!important;box-shadow:0 5px 12px #659caa33}
+.app-shell.no-pet-mode .timer-tabs button.selected,
+.app-shell.no-pet-mode .filter-tabs button.on,
+.app-shell.no-pet-mode .task-view-switch button.on,
+.app-shell.no-pet-mode .check.checked{background:#659caa!important;border-color:#659caa!important;color:#fff!important}
+.app-shell.no-pet-mode .soft-btn,
+.app-shell.no-pet-mode .timer-tabs button,
+.app-shell.no-pet-mode .filter-tabs button,
+.app-shell.no-pet-mode .task-view-switch button{background:#e8f1ef!important;color:#4d7374!important}
+.app-shell.no-pet-mode .quick-actions button{border-color:#d7e6e2!important;background:linear-gradient(145deg,#fff,#f0f7f5)!important}
+.app-shell.no-pet-mode .timer-digits{color:#345d66!important}
+.app-shell.no-pet-mode .timer-encouragement{background:#edf6f3!important;border-color:#d7e6e2!important}
+.app-shell.no-pet-mode .top-stats>span,
+.app-shell.no-pet-mode .profile{border:1px solid #d7e6e2}
+.app-shell.no-pet-mode .tag{filter:saturate(.65)}
+.app-shell.no-pet-mode .change-pet{background:#f8fffd!important;color:#42696b!important}
+.app-shell.no-pet-mode .settings-row{border-color:#d7e6e2!important}
+.app-shell.no-pet-mode .full-panel h2{color:#345d66}
+
+.study-welcome{min-height:330px;border:1px solid #d7e6e2;border-radius:26px;background:linear-gradient(145deg,#fff,#e9f3f0);padding:42px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px}.study-welcome>span{font-size:12px;letter-spacing:.18em;color:#659caa;font-weight:800}.study-welcome h2{font-size:clamp(28px,4vw,42px);margin:0;color:#345d66}.study-welcome p{color:#718b8b;margin:0 0 12px}.no-pet-mode .center-column{gap:18px}
