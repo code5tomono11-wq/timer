@@ -128,7 +128,7 @@ export default function App() {
           setTimerStatus("overtime");
           setElapsed(0);
           beep(Number(soundRepeats), volume / 100);
-          setToast(`${timerMode}の時間だよ！ ${data.pet.name}が応援しているよ🐾`);
+          setToast(`${timerMode}の時間だよ！ ${data.pet.name}が応援しているよ${noCatMode?"！":"🐾"}`);
           return 0;
         }
         return v - 1;
@@ -160,7 +160,7 @@ export default function App() {
         if (alarm.enabled && alarm.time === current && !firedAlarmsRef.current[firedKey]) {
           firedAlarmsRef.current[firedKey] = true;
           beep(5, volume / 100);
-          notify(`⏰ アラームだよ！ ${data.pet.name}からのお知らせ🐾`);
+          notify(`⏰ アラームだよ！ ${data.pet.name}からのお知らせ${noCatMode?"！":"🐾"}`);
         }
       });
     };
@@ -209,7 +209,7 @@ export default function App() {
   }
   function toggleDone(task) {
     setData(d => ({ ...d, tasks: d.tasks.map(t => t.id === task.id ? { ...t, done: !t.done } : t), pet: task.done ? d.pet : { ...d.pet, coins: d.pet.coins+2, xp: d.pet.xp+5, affection: Math.min(100,d.pet.affection+1) } }));
-    if (!task.done) notify("タスク完了！ペットが喜んでいるよ🐾");
+    if (!task.done) notify(noCatMode?"タスク完了！ペットが喜んでいるよ！":"タスク完了！ペットが喜んでいるよ🐾");
   }
   function openNewTask(task = null) {
     setEditingTask(task);
@@ -368,7 +368,7 @@ export default function App() {
 
       {page==="記録・レポート" && <section className="full-panel"><h2>▥ 記録・レポート</h2><div className="report-grid"><div><small>今日の集中時間</small><strong>{Math.floor(focusSeconds/60)}分</strong></div><div><small>今日の休憩時間</small><strong>{Math.floor(restSeconds/60)}分</strong></div><div><small>完了タスク</small><strong>{doneCount}件</strong></div><div><small>ペットのレベル</small><strong>Lv.{data.pet.level}</strong></div></div><h3>今日のセッション</h3>{todaySessions.length?todaySessions.map(s=><p className="session-row">{s.mode} · {Math.floor(s.seconds/60)}分 · {s.taskTitle||"タスク未選択"}</p>):<p className="notice">タイマーを使うと、ここに記録されるよ。</p>}</section>}
 
-      {page==="設定" && <section className="full-panel"><h2>⚙ 設定</h2><div className="settings-row"><div><b>表示デザイン</b><p>{noCatMode?"猫要素なし・シンプルモード":"ペットモード（肉球デザイン）"}</p></div><button className="soft-btn" onClick={()=>{if(!noCatMode&&data.pet.type==="cat")updatePet({type:"dog",image:""});patch({noCatMode:!noCatMode});notify(!noCatMode?"猫要素なしモードに切り替えたよ":"ペットモードに戻したよ");}}>{noCatMode?"ペットデザインに戻す":"猫要素なしにする"}</button></div><div className="settings-row"><div><b>アカウント・クラウド保存</b><p>{account||"ゲスト利用中"}</p></div><button className="add-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"登録・ログイン"}</button></div><div className="settings-row"><div><b>データのバックアップ</b><p>タスク・ペット・設定をJSONファイルで保存</p></div><button className="soft-btn" onClick={exportBackup}>バックアップを書き出す</button></div><div className="settings-row"><div><b>ペットの名前・種類・写真</b><p>名前や種類、表示スタイルを変更できるよ。</p></div><button className="soft-btn" onClick={()=>setPetPicker(true)}>変更</button></div><div className="settings-row"><div><b>アラームについて</b><p>ブラウザを閉じた状態での鳴動は保証されません。</p></div></div></section>}
+      {page==="設定" && <section className="full-panel"><h2>⚙ 設定</h2><div className="settings-row"><div><b>表示デザイン</b><p>{noCatMode?"猫要素なし・シンプルモード":"ペットモード（ピンクデザイン）"}</p></div><button className="soft-btn" onClick={()=>{if(!noCatMode&&data.pet.type==="cat")updatePet({type:"dog",image:""});patch({noCatMode:!noCatMode});notify(!noCatMode?"猫要素なしモードに切り替えたよ":"ペットモードに戻したよ");}}>{noCatMode?"ペットデザインに戻す":"猫要素なしにする"}</button></div><div className="settings-row"><div><b>アカウント・クラウド保存</b><p>{account||"ゲスト利用中"}</p></div><button className="add-btn" onClick={()=>token?logout():setAuthOpen(true)}>{token?"ログアウト":"登録・ログイン"}</button></div><div className="settings-row"><div><b>データのバックアップ</b><p>タスク・ペット・設定をJSONファイルで保存</p></div><button className="soft-btn" onClick={exportBackup}>バックアップを書き出す</button></div><div className="settings-row"><div><b>ペットの名前・種類・写真</b><p>名前や種類、写真を変更できるよ。</p></div><button className="soft-btn" onClick={()=>setPetPicker(true)}>変更</button></div><div className="settings-row"><div><b>アラームについて</b><p>ブラウザを閉じた状態での鳴動は保証されません。</p></div></div></section>}
     </main>
 
     {taskModal && <div className="modal-backdrop" onClick={()=>setTaskModal(false)}><form className="modal" onSubmit={saveTask} onClick={e=>e.stopPropagation()}><h2>{editingTask?"タスクを編集":"タスクを追加"}</h2><label>タスク名<input autoFocus value={taskTitle} onChange={e=>setTaskTitle(e.target.value)} placeholder="例：簿記論の講義を見る"/></label><label>タグ（複数選択）<div className="tag-picker">{data.tags.map(t=><button type="button" className={taskTags.includes(t.name)?"picked":""} style={{background:t.color}} onClick={()=>setTaskTags(v=>v.includes(t.name)?v.filter(x=>x!==t.name):[...v,t.name])}>{t.name}</button>)}</div></label><div className="form-grid"><label>優先順位<select value={taskPriority} onChange={e=>setTaskPriority(e.target.value)}><option>高</option><option>中</option><option>低</option></select></label><label>予定時間（分）<input type="number" min="0" value={taskMinutes} onChange={e=>setTaskMinutes(e.target.value)}/></label></div><label>期限<input type="datetime-local" value={taskDue} onChange={e=>setTaskDue(e.target.value)}/></label><div className="modal-actions"><button type="button" className="soft-btn" onClick={()=>setTaskModal(false)}>キャンセル</button><button className="add-btn">保存</button></div></form></div>}
